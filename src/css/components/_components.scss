@@ -1,0 +1,25 @@
+@use "../base/base";
+
+//knappar, styling på länkar, bakgrundsbilder osv.
+
+//Styling på h1-rubriker
+@mixin h1-title() {
+    font-family: base.$font-stack;
+    text-align: center;
+    font-size: 2rem;
+    margin: 50px auto 20px auto;
+}
+
+//Styling på h2-rubriker
+@mixin h2-title() {
+    font-family: base.$font-stack;
+    font-size: 1.3rem;
+    padding: 0 0px 10px 0px;
+}
+
+//Styling text
+@mixin text() {
+    font-family: base.$font-stack;
+    font-size: 1.1rem;
+    line-height: 1.3rem;
+}

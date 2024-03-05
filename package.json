@@ -1,0 +1,16 @@
+{
+  "name": "projekt",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Annelie Svensson",
+  "license": "ISC",
+  "source": "src/index.html",
+  "scripts": {
+    "start": "parcel --open chrome",
+    "build": "parcel build"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.12.0",
+    "parcel": "^2.12.0"
+  }
+}

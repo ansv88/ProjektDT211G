@@ -1,0 +1,69 @@
+@use "../base/normalize";
+@use "../base/base";
+@use "../components/components";
+
+body {
+    min-height: 100vh;
+    background-color: base.$bgcolor-main;
+}
+
+main {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    .wrappermain {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0;
+        background-color: base.$bgcolor-wrapper;
+        padding: 20px;
+        position: relative;
+        min-height: 100vh;
+        height: 100%;
+    }
+
+    .modediv {
+        position: absolute;
+        top: 10px;
+        margin: 10px;
+        right: 10px;
+    }
+
+    h1 {
+        @include components.h1-title();
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    h2 {
+        @include components.h2-title();
+        display: flex;
+        align-items: center;
+    }
+
+   
+    p {
+        @include components.text();
+    }
+}
+
+
+@media (min-width: 768px) {
+
+    
+
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: base.$bgcolor-main-darkm;
+    }
+    
+}
+
+@media (prefers-color-scheme: light) {
+    
+}

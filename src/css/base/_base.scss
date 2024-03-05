@@ -1,0 +1,17 @@
+//Variabler, mixins
+
+//Font
+$font-stack: "Roboto", sans-serif;
+
+//Standardfärger, lightmode
+$primary-color: #10ade6;
+$text-color: black;
+$text-color-active: white;
+$bgcolor-main: white;
+$bgcolor-wrapper: blanchedalmond;
+
+//Standardfärger darkmode
+$primary-color-darkm: darken($primary-color, 10%);
+$text-color-darkm: darken($text-color, 0.5%);
+$text-color-active-darkm: white;
+$bgcolor-main-darkm: darken($bgcolor-main, 70%);

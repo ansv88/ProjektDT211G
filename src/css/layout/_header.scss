@@ -1,0 +1,15 @@
+@use "../base/base";
+
+header {
+    background-color: base.$primary-color;
+    position: relative;
+    padding: 0 2rem;
+}
+
+@media (prefers-color-scheme: dark) {
+
+    header {
+        background-color: base.$primary-color-darkm;
+    }
+
+    }
