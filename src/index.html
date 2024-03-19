@@ -13,19 +13,31 @@
         rel="stylesheet">
     <title>Projekt DT211G</title>
     <script src="js/main.js" type="module"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 </head>
 
 <body>
     <header>
         <nav class="navbar">
             <div class="logo"><a href="index.html">En logga kanske</a></div>
-                    </nav>
+        </nav>
 
     </header>
 
     <main>
+        <div id="mapWrapper">
+            <form id="addressForm">
+                <input id="inputText" type="text" placeholder="Ange en plats eller adress">
+                <button id="submitButton" type="submit" class="button button-primary">Sök</button>
+                <input id="clearButton" type="button" value="Rensa" class="button button-secondary">
+            </form>
 
+            <div id="searchResults" class="search-results"></div>
 
+            <div id="map"></div>
+        </div>
+
+        <div id="articleWrapper"></div>
 
     </main>
 
