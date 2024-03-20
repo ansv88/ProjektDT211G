@@ -17,33 +17,43 @@
 </head>
 
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="logo"><a href="index.html">En logga kanske</a></div>
-        </nav>
-
-    </header>
-
     <main>
+        <div class="wrapper">
+        <div id="intro">
+            <h1>Sök efter intressanta platser att besöka</h1>
+            <p>Skriv in en adress eller plats så får du upp den på kartan tillsammans med intressanta Wikipedia-artiklar
+                om området inom 5 km. </p>
+        </div>
+
         <div id="mapWrapper">
+            <picture id="compass">
+                <source srcset="./compass.png?as=webp&width=150" type="image/webp" />
+                <source srcset="./compass.png?&width=150" type="image/png" />
+                <img src="./compass.png?&width=150" alt="Kompass" />
+            </picture>
             <form id="addressForm">
                 <input id="inputText" type="text" placeholder="Ange en plats eller adress">
-                <button id="submitButton" type="submit" class="button button-primary">Sök</button>
-                <input id="clearButton" type="button" value="Rensa" class="button button-secondary">
+                <div id="buttonWrapper">
+                    <button id="submitButton" type="submit" class="button button-primary">Sök</button>
+                    <input id="clearButton" type="button" value="Rensa" class="button button-secondary">
+                </div>
             </form>
 
-            <div id="searchResults" class="search-results"></div>
+            <div id="searchResults" class="search-results">
+            </div>
 
             <div id="map"></div>
         </div>
 
         <div id="articleWrapper"></div>
-
+    </div>
     </main>
 
     <footer id="footer">
         <div class="footer-content">
+            <p>DT211G - projektuppgift</p>
             <p>© 2024 Annelie Svensson</p>
+            <p>Background image designed by <a href="http://www.freepik.com">Freepik</a></p>
         </div>
     </footer>
 </body>

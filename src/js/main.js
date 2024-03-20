@@ -13,6 +13,7 @@ window.onload = initMap;
 let map;
 let marker;
 let geocoder;
+let articleMarkers = [];
 
 //Funktion som laddar Google Maps API och skapar kartan
 async function initMap() {
@@ -35,12 +36,25 @@ function addEventListeners() {
   document.getElementById("addressForm").addEventListener("submit", formHandler, false);
   document.getElementById("clearButton").addEventListener("click", clearAll, false);
   document.getElementById("inputText").addEventListener("focus", clearAll, false);
+  document.getElementById("inputText").addEventListener("input", inputAnimation, false);
 }
 
 //Funktion för att hantera submittad info från sökformuläret
 function formHandler(event) {
   event.preventDefault(); //Förhindra formulärets standardbeteende (sidomladdning)
   geocode({ address: document.getElementById("inputText").value }); //Anropa geocode-funktionen
+}
+
+//Funktion som lägger till en klass på bild som ska animeras när textinput sker i sökfältet
+function inputAnimation() {
+const input = document.getElementById("inputText");
+const img = document.querySelector("#compass img");
+
+  if (input.value.trim().length > 0) {
+    img.classList.add("compass-spin");
+  } else {
+    img.classList.remove("compass-spin");
+  }
 }
 
 //Funktion för att rensa markör, textfält och artiklar med clear-knapp eller när användaren fokuserar på/klickar i textfältet
@@ -52,6 +66,16 @@ function clearAll() {
 
   document.getElementById("inputText").value = "";
   document.getElementById("articleWrapper").innerHTML = "";
+
+    //Rensa artikelmarkörerna
+    for (let marker of articleMarkers) {
+      marker.setMap(null);
+    }
+    //Töm arrayen efter att alla markörer tagits bort
+    articleMarkers = [];
+
+    //Anropa animationsfunktionen för att ta bort klassen och stoppa animationen
+    inputAnimation();
 }
 
 //Funktion som använder Google Maps Geocoding API för att omvandla en adress (från textfältet) till geografiska koordinater
@@ -62,6 +86,14 @@ function geocode(request) {
       const searchResultsEl = document.getElementById("searchResults");
       searchResultsEl.innerHTML = ""; // Rensa tidigare sökresultat
 
+      //Skapa en lista för att visa sökresultaten
+      const resultListHeading = document.createElement("h2");
+      resultListHeading.innerHTML = "Välj ett alternativ:"
+      searchResultsEl.appendChild(resultListHeading);
+      const resultList = document.createElement("ul");
+      resultList.classList.add("searchResultList");
+      searchResultsEl.appendChild(resultList);
+
       if (results.length === 1) { // Om det endast finns ett resultat, visa det direkt
         const location = results[0];
         const locationLatLng = location.geometry.location;
@@ -70,11 +102,11 @@ function geocode(request) {
       } else { // Om det finns flera resultat, visa en lista för användaren att välja från
         results.forEach((location) => {
           const locationLatLng = location.geometry.location;
-          const resultItem = document.createElement("div");
+          const resultItem = document.createElement("li");
           resultItem.classList.add("result-item");
           resultItem.innerHTML = location.formatted_address;
           resultItem.addEventListener("click", () => handleResult(locationLatLng, location.formatted_address));
-          searchResultsEl.appendChild(resultItem);
+          resultList.appendChild(resultItem);
         });
       }
     })
@@ -85,9 +117,9 @@ function geocode(request) {
 
 //Funktion för att hantera valt resultat från sökning
 function handleResult(locationLatLng, address) {
-  //Centrerar kartan på det valda resultatet och bestämmer zoomnivån
+  //Centrera kartan på det valda resultatet och bestäm zoomnivån
   map.setCenter(locationLatLng);
-  map.setZoom(13);
+  map.setZoom(12);
 
   if (window.currentInfoWindow) window.currentInfoWindow.close();  //Kontrollerar om en tidigare InfoWindow finns och stänger den i så fall
 
@@ -119,8 +151,8 @@ function handleResult(locationLatLng, address) {
 
 //Funktion som anropar Wikipedia's Geosearch API för att hitta Wikipedia-artiklar relaterade till en specifik geografisk position.
 async function fetchGeoArticles(lat, lon) {
-  //Hämta datan genom koordinaterna, sökradie 10km och max 10 artiklar
-  const url = `https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gscoord=${lat}|${lon}&gsradius=10000&gslimit=10&format=json&origin=*`;
+  //Hämta datan genom koordinaterna, sökradie 5km och max 6 artiklar
+  const url = `https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gscoord=${lat}|${lon}&gsradius=5000&gslimit=6&format=json&origin=*`;
 
   //Fetch-anrop
   try {
@@ -130,7 +162,7 @@ async function fetchGeoArticles(lat, lon) {
 
     //Loopa igenom artiklarna och skicka vidare artiklarna med deras pageid till fetchArticleDetails för att hämta mer detaljerad info
     for (const article of articles) {
-      fetchArticleDetails(article.pageid);
+      fetchArticleDetails(article.pageid, article);
     }
   } catch (error) {
     console.error('Error fetching geo articles:', error);
@@ -138,7 +170,7 @@ async function fetchGeoArticles(lat, lon) {
 }
 
 //Funktion för att hämta mer detaljerad information om Wikipedia-artiklar 
-async function fetchArticleDetails(pageId) {
+async function fetchArticleDetails(pageId, articleGeoData) {
   //Hämta datan genom pageId, artikelutdrag och ev thumbnail
   const detailUrl = `https://en.wikipedia.org/w/api.php?action=query&prop=extracts|pageimages&pageids=${pageId}&exintro&format=json&piprop=thumbnail&pithumbsize=200&origin=*`;
 
@@ -149,17 +181,18 @@ async function fetchArticleDetails(pageId) {
     const page = data.query.pages[pageId];
 
     //Anropa ny funktion för visning av artiklarna
-    displayArticles(page);
+    displayArticles(page, articleGeoData);
   } catch (error) {
     console.error('Error fetching article details:', error);
   }
 }
 
 //Funktion för att visa hämtade Wikipedia-artiklar
-function displayArticles(article) {
+function displayArticles(article, geoData) {
   //Skapa DOM-element för att visa resultatet
   const articleWrapperEl = document.getElementById('articleWrapper');
   const articleEl = document.createElement('article');
+  articleEl.classList.add("wikiArticle");
   const articleImage = article.thumbnail ? `<img src="${article.thumbnail.source}" alt="${article.title}">` : '';
 
   //Dela utdraget i meningar och ta de tre första, om de finns
@@ -167,10 +200,32 @@ function displayArticles(article) {
   const firstThreeSentences = sentences.length > 3 ? sentences.slice(0, 3).join('. ') + '.' : sentences.join('. ');
 
   articleEl.innerHTML = `
+  <a href="https://en.wikipedia.org/?curid=${article.pageid}" target="_blank">
         <h2>${article.title}</h2>
         ${articleImage}
         <p>${firstThreeSentences}</p>
-        <a href="https://en.wikipedia.org/?curid=${article.pageid}" target="_blank">Läs mer</a>
+        <p><br><br>Klicka för att läsa mer (öppnas i ny flik)</p>
+        </a>
     `;
   articleWrapperEl.appendChild(articleEl);
+
+  //Skapa markörer för artiklarna baserat på geoData
+  const articleMarker = new google.maps.Marker({
+    position: new google.maps.LatLng(geoData.lat, geoData.lon),
+    map: map,
+    title: article.title
+  });
+
+  //Lägg till markörerna för artiklarna i en array
+  articleMarkers.push(articleMarker);
+
+  //Skapa ett InfoWindow till markörerna
+  const infoWindow = new google.maps.InfoWindow({
+    content: `<div><strong>${article.title}</strong></div>`
+  });
+
+  //Visa infoWindow när man klickar på markören
+  articleMarker.addListener('click', () => {
+    infoWindow.open(map, articleMarker);
+  });
 }

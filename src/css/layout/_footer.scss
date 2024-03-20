@@ -1,24 +1,52 @@
 @use "../base/base";
 
 footer {
-    display: flex;
-    height: 6vh;
-    background-color: base.$primary-color;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    align-content: center;
+    max-width: 1200px;
+    height: auto;
+    background-color: base.$footer-color;
     color: base.$text-color;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
+    margin: 0 auto;
+    text-align: center;
 
     p {
-        font-size: 1.1rem;
+        font-size: 0.9rem;
+    }
+
+    p:last-child {
+        font-size: 0.7rem;
+        margin-top: 15px;
     }
 }
 
 
-@media (prefers-color-scheme: dark) {
-
+@media (min-width: 768px) {
     footer {
-        background-color: base.$primary-color-darkm;
+        grid-template-columns: 1fr 1fr 1fr;
+        align-items: center;
+
+        .footer-content {
+            display: contents;
+            width: 100%;
+        }
+
+        p:first-child {
+            grid-column: 1 / 2;
+            text-align: left;
+        }
+
+        p:nth-child(2) {
+            grid-column: 2 / 3;
+            text-align: center;
+        }
+
+        p:last-child {
+            grid-column: 3 / 4;
+            text-align: right;
+        }
     }
 
 }
