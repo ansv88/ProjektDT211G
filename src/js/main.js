@@ -15,7 +15,7 @@ let marker;
 let geocoder;
 let articleMarkers = [];
 
-//Funktion som laddar Google Maps API och skapar kartan
+//Funktion som laddar Google Maps JavaScript API och skapar kartan
 async function initMap() {
   const { Map } = await google.maps.importLibrary("maps");
   map = new Map(document.getElementById("map"), {
@@ -149,7 +149,7 @@ function handleResult(locationLatLng, address) {
 }
 
 
-//Funktion som anropar Wikipedia's Geosearch API för att hitta Wikipedia-artiklar relaterade till en specifik geografisk position.
+//Funktion som anropar Wikipedias API med geosearch-modul för att hitta Wikipedia-artiklar relaterade till en specifik geografisk position.
 async function fetchGeoArticles(lat, lon) {
   //Hämta datan genom koordinaterna, sökradie 5km och max 6 artiklar
   const url = `https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gscoord=${lat}|${lon}&gsradius=5000&gslimit=6&format=json&origin=*`;
