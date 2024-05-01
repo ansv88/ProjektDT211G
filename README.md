@@ -1,5 +1,6 @@
-## Projektuppgift för kursen DT211G
-Denna webbapplikation är gjord som en projektuppgift i kursen Fronend-baserad webbutveckling som ges på Mittuniversitetet. Med applikationen kan man söka på en plats eller adress och sedan få upp närliggande intressanta platser med Wikipedia-artiklar relaterade till dessa.
+## Kartwiki-applikation
+Denna webbapplikation är gjord som en projektuppgift i kursen DT211G Fronend-baserad webbutveckling som ges på Mittuniversitetet.
+Med applikationen kan man söka på en plats eller adress och sedan få upp närliggande intressanta platser med Wikipedia-artiklar relaterade till dessa.
 
 ### Funktioner
 Sökfunktion: Ange en adress eller ett platsnamn i sökfältet för att få upp den på en karta och även se intressanta platser inom en radie av 5 km.
